@@ -2,6 +2,8 @@ import type { MessageStatus } from '@/types/api'
 import { LazyRainbowText } from '@/components/LazyRainbowText'
 import { SparklesIcon } from '@/components/ToolCard/icons'
 import { cn } from '@/lib/utils'
+import { parseCodexHeartbeat } from '@/lib/codex-heartbeat'
+import { CodexHeartbeatCard } from './CodexHeartbeatCard'
 
 const LEADING_DIRECTIVE_REGEX = /^([$\/][a-z0-9][\w-]*)(?=\s|$)/i
 
@@ -59,6 +61,9 @@ export function DirectiveChip(props: { value: string }) {
 }
 
 export function UserBubbleContent(props: { text: string }) {
+    const heartbeat = parseCodexHeartbeat(props.text)
+    if (heartbeat) return <CodexHeartbeatCard notification={heartbeat} raw={props.text} />
+
     const { directives, body } = extractLeadingDirectives(props.text)
     const hasBody = body.trim().length > 0
     const shouldRenderInline = directives.length > 0 && hasBody && !/[\r\n]/.test(body)

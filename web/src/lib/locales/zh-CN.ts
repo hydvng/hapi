@@ -1,4 +1,13 @@
 export default {
+  "message.heartbeat.title": "自动化通知",
+  "message.heartbeat.details": "详情与原始消息",
+  "message.heartbeat.automation": "任务编号",
+  "message.heartbeat.decision": "通知决策",
+  "message.heartbeat.historical": "这是会话中保存的通知，不代表任务当前状态。",
+  "session.codex.activeWriter": "该聊天正被 Codex 桌面端或其他 Codex 进程占用。请等相关任务结束，完全退出占用该聊天的应用或进程后，再在 HAPI 重试；仅切换聊天可能不会释放占用。也可以在 HAPI 新建聊天。",
+  "session.codex.resumeUnconfirmed": "上次恢复 Codex 聊天的启动状态尚未确认或清理完成。请先查看机器的最近启动错误；如果提示聊天被占用，等相关任务结束后退出占用它的应用。仍无法重试时，可先归档这个 HAPI 会话再重新打开。不要删除写入锁文件。",
+  "newSession.lastSpawnError": "最近一次启动错误",
+
   // Loading states
   'loading': '加载中…',
   'authorizing': '认证中…',

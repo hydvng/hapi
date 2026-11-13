@@ -1,4 +1,6 @@
 import type { Machine } from '../types/api'
+import { formatCodexStartupError } from './formatCodexStartupError'
+import type { Locale } from '@/lib/i18n-context'
 
 function getLastSpawnError(runnerState: unknown): { message: string; at?: number } | null {
     if (!runnerState || typeof runnerState !== 'object' || Array.isArray(runnerState)) {
@@ -16,7 +18,7 @@ function getLastSpawnError(runnerState: unknown): { message: string; at?: number
     return typeof at === 'number' ? { message, at } : { message }
 }
 
-export function formatRunnerSpawnError(machine: Machine | null): string | null {
+export function formatRunnerSpawnError(machine: Machine | null, locale?: Locale): string | null {
     const lastSpawnError = getLastSpawnError(machine?.runnerState)
     if (!lastSpawnError) {
         return null
@@ -25,7 +27,6 @@ export function formatRunnerSpawnError(machine: Machine | null): string | null {
     const at = typeof lastSpawnError.at === 'number'
         ? new Date(lastSpawnError.at).toLocaleString()
         : null
-    return at
-        ? `${lastSpawnError.message} (${at})`
-        : lastSpawnError.message
+    const message = formatCodexStartupError(lastSpawnError.message, locale)
+    return at ? `${message} (${at})` : message
 }

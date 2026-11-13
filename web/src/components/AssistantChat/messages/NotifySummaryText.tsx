@@ -7,6 +7,8 @@ import { MarkdownText } from '@/components/assistant-ui/markdown-text'
 import { CheckIcon } from '@/components/icons'
 import { useSessionSummaryInChat } from '@/hooks/useSessionSummaryInChat'
 import { useTranslation } from '@/lib/use-translation'
+import { parseCodexHeartbeat } from '@/lib/codex-heartbeat'
+import { CodexHeartbeatCard } from './CodexHeartbeatCard'
 
 type SummaryStatusPresentation = {
     labelKey: string
@@ -163,6 +165,12 @@ export const NotifySummaryText: TextMessagePartComponent = (props) => {
         completedTextRef.current = text
     } else if (text !== completedTextRef.current) {
         completedTextRef.current = null
+    }
+
+    const heartbeat = status.type === 'complete' || completedTextRef.current === text
+        ? parseCodexHeartbeat(text) : null
+    if (heartbeat) {
+        return withSearchSourceMarker(searchSource, <CodexHeartbeatCard notification={heartbeat} raw={text} />)
     }
 
     if (!showInChat) {

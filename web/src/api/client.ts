@@ -72,6 +72,7 @@ import type {
     UploadFileResponse
 } from '@hapi/protocol/apiTypes'
 import { fetchThroughAuthProxy } from '@/api/authProxy'
+import { formatCodexStartupError } from '@/utils/formatCodexStartupError'
 import { FOLLOW_SESSION_REDIRECTS_HEADER } from '@hapi/protocol'
 import type { SessionReadState, SessionReadStateRequest, AgentFlavor, MessageDeliveryMode } from '@hapi/protocol'
 import type { CancelMessageResponse, SteerQueuedMessageResponse } from '@hapi/protocol/schemas'
@@ -286,7 +287,7 @@ export class ApiClient {
             const body = await res.text().catch(() => '')
             const code = parseErrorCode(body)
             throw new ApiError(
-                `HTTP ${res.status} ${res.statusText}: ${body}`,
+                formatCodexStartupError(`HTTP ${res.status} ${res.statusText}: ${body}`),
                 res.status,
                 code,
                 body || undefined

@@ -90,6 +90,7 @@ import { PiSessionImportDialog } from '@/components/PiSessionImportDialog'
 import { OpencodeSessionImportDialog } from '@/components/OpencodeSessionImportDialog'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { formatRunnerSpawnError } from '../../utils/formatRunnerSpawnError'
+import { formatCodexStartupError } from '../../utils/formatCodexStartupError'
 import { markCodexSessionsImported } from '@/lib/codexImportedSessions'
 import { useToast } from '@/lib/toast-context'
 
@@ -107,7 +108,7 @@ export function NewSession(props: {
     initialMachineId?: string
 }) {
     const { haptic } = usePlatform()
-    const { t } = useTranslation()
+    const { t, locale } = useTranslation()
     const { addToast } = useToast()
     const { spawnSession, isPending, error: spawnError } = useSpawnSession(props.api)
     const { sessions, refetch: refetchSessions } = useSessions(props.api)
@@ -470,8 +471,8 @@ export function NewSession(props: {
     const agyModelPickedByUserRef = useRef(false)
     const [dshSelectedModel, setDshSelectedModel] = useState<string | null>(null)
     const runnerSpawnError = useMemo(
-        () => formatRunnerSpawnError(selectedMachine),
-        [selectedMachine]
+        () => formatRunnerSpawnError(selectedMachine, locale),
+        [selectedMachine, locale]
     )
     const codexModelOptions = useMemo(() => {
         const options = [{ value: 'auto', label: 'Default' }]
@@ -2203,7 +2204,7 @@ export function NewSession(props: {
             />
             {runnerSpawnError ? (
                 <div className="px-3 py-2 text-xs text-red-600">
-                    Runner last spawn error: {runnerSpawnError}
+                    {t('newSession.lastSpawnError')}: {runnerSpawnError}
                 </div>
             ) : null}
             <DirectorySection
@@ -2495,7 +2496,7 @@ export function NewSession(props: {
 
             {(error ?? spawnError) ? (
                 <div className="px-3 py-2 text-sm text-red-600">
-                    {error ?? spawnError}
+                    {formatCodexStartupError(error ?? spawnError ?? '', locale)}
                 </div>
             ) : null}
 

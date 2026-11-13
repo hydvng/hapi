@@ -1,4 +1,13 @@
 export default {
+  "message.heartbeat.title": "Automation notification",
+  "message.heartbeat.details": "Details and original message",
+  "message.heartbeat.automation": "Task",
+  "message.heartbeat.decision": "Decision",
+  "message.heartbeat.historical": "This notification was saved in the conversation; it does not indicate the current task status.",
+  "session.codex.activeWriter": "This Codex chat is in use by the desktop app or another Codex process. Wait for its work to finish, then fully quit the app or process holding this chat and retry in HAPI. Switching tabs may not release it. You can also create a new chat in HAPI.",
+  "session.codex.resumeUnconfirmed": "The previous Codex resume attempt has not been confirmed or cleaned up. Check the machine’s last startup error. If the chat is in use, wait for its work to finish and quit the app holding it. If retry still fails, archive this HAPI session and reopen it. Do not delete writer lock files.",
+  "newSession.lastSpawnError": "Last startup error",
+
   // Loading states
   'loading': 'Loading…',
   'authorizing': 'Authorizing…',

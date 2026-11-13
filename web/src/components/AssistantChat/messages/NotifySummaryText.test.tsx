@@ -48,6 +48,24 @@ function renderText(
     )
 }
 
+describe('Codex heartbeat notifications', () => {
+    const raw = '<heartbeat><automation_id>60gib-23</automation_id><decision>NOTIFY</decision><message>归档任务已停止</message></heartbeat>'
+
+    it('renders completed assistant notifications and preserves the search anchor', () => {
+        const { container } = renderText(raw, 'complete', 'heartbeat-source')
+        expect(screen.getByTestId('codex-heartbeat')).toBeInTheDocument()
+        expect(screen.getByText('归档任务已停止')).toBeVisible()
+        expect(container.querySelector('[data-hapi-source-message-id="heartbeat-source"]')).toBeInTheDocument()
+        expect(screen.queryByTestId('raw-markdown')).toBeNull()
+    })
+
+    it('keeps streaming text as ordinary text until completed', () => {
+        renderText(raw, 'running')
+        expect(screen.queryByTestId('codex-heartbeat')).toBeNull()
+        expect(screen.getByTestId('raw-markdown')).toBeInTheDocument()
+    })
+})
+
 function rerenderText(view: ReturnType<typeof renderText>, text: string, statusType: 'complete' | 'running') {
     view.rerender(
         <I18nProvider>

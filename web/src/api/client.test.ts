@@ -28,6 +28,22 @@ describe('ApiClient error mapping', () => {
         globalThis.fetch = originalFetch
     })
 
+    it('explains Codex contention while retaining the original API status, code and body', async () => {
+        localStorage.setItem('hapi-lang', 'zh-CN')
+        const body = JSON.stringify({ error: 'thread abc already has an active writer', code: 'resume_failed' })
+        fetchMock.mockResolvedValueOnce(new Response(body, { status: 500 }))
+        try {
+            await expect(new ApiClient('test-token').reopenSession('session-busy')).rejects.toMatchObject({
+                message: expect.stringContaining('完全退出'),
+                status: 500,
+                code: 'resume_failed',
+                body,
+            })
+        } finally {
+            localStorage.removeItem('hapi-lang')
+        }
+    })
+
     it('passes cancellation through to session file search', async () => {
         const controller = new AbortController()
         fetchMock.mockImplementationOnce((_url: string, init: RequestInit) => new Promise((_resolve, reject) => {
